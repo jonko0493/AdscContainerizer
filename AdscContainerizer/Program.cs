@@ -13,20 +13,19 @@ namespace AdscContainerizer
         public static void Main(string[] args)
         {
             string snd = string.Empty, output = string.Empty, psxavenc = string.Empty;
-            int sampleRate = 0, channels = 0, interleave = 0;
+            int sampleRate = 0, interleave = 0;
             OptionSet options = new()
             {
                 { "s|snd|sound=", "Input sound", s => snd = s },
                 { "e|psxavenc=", "Path to psxavenc", e => psxavenc = e },
                 { "o|output=", "Output ADSC", o => output = o },
                 { "f|sample-rate=", "Sample rate", f => sampleRate = int.Parse(f) },
-                { "c|channels=", "Channel count", c => channels = int.Parse(c) },
                 { "i|interleave=", "Interleave offset", i => interleave = int.Parse(i) },
             };
             options.Parse(args);
 
             string tmpFile = Path.Combine(Path.GetTempPath(), "tmp.snd");
-            ProcessStartInfo psi = new(psxavenc, $"-t spui -f {sampleRate} -c {channels} -i {interleave} {snd} {tmpFile}");
+            ProcessStartInfo psi = new(psxavenc, $"-t spui -f {sampleRate} -c 2 -i {interleave} {snd} {tmpFile}");
             Process.Start(psi)?.WaitForExit();
 
             byte[] sndFile = File.ReadAllBytes(tmpFile);
@@ -49,7 +48,7 @@ namespace AdscContainerizer
             header.AddRange(BitConverter.GetBytes(0x18));
             header.AddRange(BitConverter.GetBytes(0x10));
             header.AddRange(BitConverter.GetBytes(sampleRate));
-            header.AddRange(BitConverter.GetBytes(channels));
+            header.AddRange(BitConverter.GetBytes(2));
             header.AddRange(BitConverter.GetBytes(interleave));
             header.AddRange([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]);
             header.AddRange(Encoding.ASCII.GetBytes("SSbd"));
