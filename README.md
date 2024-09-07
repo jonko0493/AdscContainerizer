@@ -11,4 +11,4 @@ AdscContainerizer -s [path/to/audio/file] -e [/path/to/psxavenc] -o [/path/to/ou
 
 Note that only stereo audio is supported.
 
-Please ensure that the audio sample rate you specify matches the output from `ffprobe.exe` (or similar). If you need to adjust the audio sample rate before using this tool, use `ffmpeg` to do so.
+Please ensure that the audio sample rate you specify matches the output from `ffprobe` (or similar). If you need to adjust the audio sample rate before using this tool, use `ffmpeg` to do so.
